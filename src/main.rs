@@ -1,3 +1,19 @@
-fn main() {
-    println!("Hello, world!");
+mod blog;
+use blog::{
+    manual_hello,
+    hello,
+    echo
+};
+use actix_web::{ web, App,  HttpServer};
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    HttpServer::new(|| {
+        App::new()
+            .service(hello)
+            .service(echo)
+            .route("/hey", web::get().to(manual_hello))
+    })
+    .bind("127.0.0.1:8080")?
+    .run()
+    .await
 }
